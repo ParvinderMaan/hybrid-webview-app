@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Cart</title>
+</head>
+
+<body>
+<h1>My Cart</h1>
+<h2>Products</h2>
+<ul>
+    <li id="item1">
+        <span>Product 1</span>
+        <span id="price1">$20.00</span>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </li>
+    <li id="item2">
+        <span>Product 2</span>
+        <span id="price2">$30.00</span>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </li>
+    <li id="item3">
+        <span>Product 3</span>
+        <span id="price3">$40.00</span>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </li>
+    <li id="item4">
+        <span>Product 4</span>
+        <span id="price4">$50.00</span>
+        <button onclick="callNativeCodeFromWebCode()">Call native android code from webcode</button>
+    </li>
+</ul>
+<p id="cart"></p>
+<script>
+        //function for add-to-cart
+        function addToCart(button) {
+          //  alert("clicked !!");
+       var listItem = button.parentElement;
+       var priceElement = listItem.querySelector('span[id^="price"]');
+       var price = priceElement.textContent;
+       document.getElementById("cart").textContent = "Price: " + price;
+      }
+
+
+       //function for random-price-generator
+      function getRandomPrice() {
+    // Generate a random price between 10 and 100 with two decimal places
+    return (Math.random() * (100 - 10) + 10).toFixed(2);
+    }
+
+    //function for random-price-generator
+      function getRandomTimeInSecs() {
+       const minDelay = 3000; // 3 sec in ms
+       const maxDelay = 10000; // 10 sec in ms
+      return Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+      }
+
+ function updatePrices() {
+      var price1 = getRandomPrice();
+      var price2 = getRandomPrice();
+      var price3 = getRandomPrice();
+
+    document.getElementById("price1").textContent = "$" + price1;
+    document.getElementById("price2").textContent = "$" + price2;
+    document.getElementById("price3").textContent = "$" + price3;
+}
+
+//backend logic to get real time values from DB
+//might be some ajax request -> DB -> webpage or web-hooks
+setInterval(updatePrices, 4000);
+
+
+  // functions that calls from native code
+  function callNativeCodeFromWebCode(){
+    // Call the Kotlin method via the bridge
+   androidWebNativeBridge.showNativeToast("I am coming from web to native");
+ }
+
+  // functions that are being called from native code
+  function callWebCodeFunctionFromNativeCode(message) {
+             alert("Received message from Android: " + message);
+             var price1 = getRandomPrice();
+             document.getElementById("price1").textContent = "$" + price1;
+ }
+
+  // Add other functions as needed
+</script>
+</body>
+</html>
